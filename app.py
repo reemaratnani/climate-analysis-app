@@ -69,6 +69,20 @@ def tobs():
 
     return jsonify(station_tobs)
 
+@app.route("/api/v1.0/start")
+def calc_temps():
+    """TMIN, TAVG, and TMAX for a list of dates.
+    
+    Args:
+        start_date (string): A date string in the format %Y-%m-%d
+        
+    Returns:
+        TMIN, TAVE, and TMAX
+    """
+    start_date = "2017-04-01"
+    results = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
+        filter(Measurement.date >= start_date).all()
+    return jsonify(results)
 
 if __name__ == '__main__':
     app.run(debug=True)
